@@ -13,6 +13,7 @@ Ghorfa ("room" in Arabic) is a web app that helps students find a room or an apa
 | Anas Ibrahim Sayed | 320250109 |
 | Mazen Mahmoud | 320250094 |
 | Malek Khamis | 320250--- |
+| Amir | 320250--- |
 
 ## Contents
 
