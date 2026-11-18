@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Find furnished rooms and apartments near your university with Ghorfa.">
+    <meta name="author" content="Anas I. Hashem">
+    <title>Ghorfa | Student accommodation near your university</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Readex+Pro:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/base.css">
+    <link rel="stylesheet" href="css/components.css">
+    <link rel="stylesheet" href="css/home.css">
+</head>
+
+<body>
+
+    <header class="site-header">
+        <div class="container site-header__inner">
+            <a class="logo" href="index.html"><img src="imgs/logo.svg" alt="Ghorfa home" width="120" height="40"></a>
+            <button class="menu-toggle" type="button" aria-label="Menu" aria-expanded="false" aria-controls="site-menu">
+                <span></span><span></span><span></span>
+            </button>
+            <div class="site-menu" id="site-menu">
+                <nav aria-label="Main">
+                    <ul class="nav">
+                        <li><a href="pages/search.html">Search rooms</a></li>
+                        <li><a href="#how-it-works">How it works</a></li>
+                        <li><a href="pages/about.html">About &amp; contact</a></li>
+                    </ul>
+                </nav>
+                <div class="header-actions">
+                    <button class="lang-switch" type="button" aria-label="Switch language">
+                        <span class="is-active">EN</span><span lang="ar">عربي</span>
+                    </button>
+                    <a class="btn" href="pages/login.html">Log in</a>
+                    <a class="btn btn--primary" href="pages/login.html#register">List your room</a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <section class="hero">
+            <div class="container hero__inner">
+                <div class="hero__content">
+                    <span class="eyebrow">E-JUST · New Borg El Arab</span>
+                    <h1>Your room, minutes from campus.</h1>
+                    <p class="hero__lead">
+                        Find furnished rooms and apartments near your university. See the price, the real furniture
+                        condition and the exact map location, then chat with the owner directly.
+                    </p>
+
+                    <form class="search-bar" action="pages/search.html" method="get">
+                        <div class="search-bar__field">
+                            <label for="university">University</label>
+                            <select id="university" name="university">
+                                <option value="e-just">E-JUST</option>
+                                <option value="anu">Alexandria National University</option>
+                                <option value="pharos">Pharos University</option>
+                            </select>
+                        </div>
+                        <div class="search-bar__field">
+                            <label for="max-price">Max price</label>
+                            <input id="max-price" name="max-price" type="number" min="0" step="100" placeholder="3,500 EGP">
+                        </div>
+                        <div class="search-bar__field">
+                            <label for="type">Type</label>
+                            <select id="type" name="type">
+                                <option value="room">Room</option>
+                                <option value="apartment">Apartment</option>
+                            </select>
+                        </div>
+                        <button class="btn btn--primary" type="submit">Search</button>
+                    </form>
+
+                    <ul class="trust">
+                        <li>Admin-reviewed listings</li>
+                        <li>Exact map location</li>
+                        <li>Chat or call the owner</li>
+                    </ul>
+                </div>
+
+                <div class="hero__art">
+                    <img src="imgs/illustration.svg" alt="" width="460" height="580">
+                </div>
+            </div>
+        </section>
+
+        <section class="featured" aria-labelledby="featured-title">
+            <div class="container">
+                <div class="section-head">
+                    <div>
+                        <h2 id="featured-title">Featured rooms near E-JUST</h2>
+                        <p>Verified by our admins. Updated daily.</p>
+                    </div>
+                    <a class="text-link" href="pages/search.html">See all rooms →</a>
+                </div>
+
+                <div class="rooms-grid">
+                    <article class="room-card">
+                        <div class="room-card__media">
+                            <img src="imgs/room.png" alt="Single room with a bed and a desk" width="400" height="200" loading="lazy">
+                            <span class="room-tag">No. 204</span>
+                        </div>
+                        <div class="room-card__body">
+                            <div class="room-card__head">
+                                <h3 class="room-card__title">Sunny single room, Hay 4</h3>
+                                <span class="badge">Available</span>
+                            </div>
+                            <p class="room-card__meta">850 m to E-JUST · 11 min walk</p>
+                            <ul class="chips">
+                                <li class="chip">Furnished</li>
+                                <li class="chip">A/C</li>
+                                <li class="chip">Wi-Fi</li>
+                            </ul>
+                            <div class="room-card__footer">
+                                <p class="price">2,800 EGP <small>/ month</small></p>
+                                <a class="room-card__link" href="pages/room.html">View room →</a>
+                            </div>
+                        </div>
+                    </article>
+
+                    <article class="room-card">
+                        <div class="room-card__media">
+                            <img src="imgs/room.png" alt="Two-bedroom apartment living area" width="400" height="200" loading="lazy">
+                            <span class="room-tag">No. 07</span>
+                        </div>
+                        <div class="room-card__body">
+                            <div class="room-card__head">
+                                <h3 class="room-card__title">2-bed apartment, Hay 7</h3>
+                                <span class="badge">Available</span>
+                            </div>
+                            <p class="room-card__meta">1.4 km to E-JUST · 5 min by bus</p>
+                            <ul class="chips">
+                                <li class="chip">Furnished</li>
+                                <li class="chip">2 beds</li>
+                                <li class="chip">Balcony</li>
+                            </ul>
+                            <div class="room-card__footer">
+                                <p class="price">5,200 EGP <small>/ month</small></p>
+                                <a class="room-card__link" href="pages/room.html">View room →</a>
+                            </div>
+                        </div>
+                    </article>
+
+                    <article class="room-card">
+                        <div class="room-card__media">
+                            <img src="imgs/room.png" alt="Shared room with two beds" width="400" height="200" loading="lazy">
+                            <span class="room-tag">No. 31</span>
+                        </div>
+                        <div class="room-card__body">
+                            <div class="room-card__head">
+                                <h3 class="room-card__title">Shared room, Hay 3</h3>
+                                <span class="badge">Available</span>
+                            </div>
+                            <p class="room-card__meta">600 m to E-JUST · 8 min walk</p>
+                            <ul class="chips">
+                                <li class="chip">Basic</li>
+                                <li class="chip">Wi-Fi</li>
+                                <li class="chip">Female only</li>
+                            </ul>
+                            <div class="room-card__footer">
+                                <p class="price">1,400 EGP <small>/ month</small></p>
+                                <a class="room-card__link" href="pages/room.html">View room →</a>
+                            </div>
+                        </div>
+                    </article>
+                </div>
+            </div>
+        </section>
+
+        <section class="how" id="how-it-works" aria-labelledby="how-title">
+            <div class="container">
+                <h2 id="how-title">From search to keys in 3 steps</h2>
+                <ol class="steps">
+                    <li class="step">
+                        <h3>Search &amp; filter</h3>
+                        <p>Pick your university, set a budget, choose a room or an apartment. See it on the map.</p>
+                    </li>
+                    <li class="step">
+                        <h3>Chat with the owner</h3>
+                        <p>Ask about furniture, bills and visiting times inside Ghorfa, or call if the owner shares a number.</p>
+                    </li>
+                    <li class="step">
+                        <h3>Visit and rent</h3>
+                        <p>Meet the owner, check the place and arrange the rent directly. No brokers, no extra fees.</p>
+                    </li>
+                </ol>
+            </div>
+        </section>
+
+        <section class="cta">
+            <div class="container cta__inner">
+                <div>
+                    <h2>Got a room near campus?</h2>
+                    <p>List it for free. Students contact you directly, with no broker fees.</p>
+                </div>
+                <a class="btn" href="pages/login.html#register">List your room</a>
+            </div>
+        </section>
+    </main>
+
+    <footer class="site-footer">
+        <div class="container site-footer__inner">
+            <a class="site-footer__logo" href="index.html">Ghorfa</a>
+            <nav aria-label="Footer">
+                <ul>
+                    <li><a href="pages/search.html">Search rooms</a></li>
+                    <li><a href="#how-it-works">How it works</a></li>
+                    <li><a href="pages/about.html">About &amp; contact</a></li>
+                </ul>
+            </nav>
+            <p>&copy; 2026 Ghorfa · E-JUST</p>
+        </div>
+    </footer>
+
+</body>
+
+</html>

@@ -1,0 +1,67 @@
+/* ==========================================================
+   auth.css — login / register page only
+   ========================================================== */
+.auth {
+    display: grid;
+    grid-template-columns: 1fr 520px;
+    align-items: stretch;
+    gap: var(--space-12);
+    padding-block: var(--space-12) var(--space-16);
+}
+
+.auth__pitch {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: var(--space-8);
+    padding: var(--space-12);
+    color: var(--paper);
+    background: var(--clay);
+    border: var(--border);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow-lg);
+}
+.auth__pitch > div { display: grid; justify-items: start; gap: var(--space-4); }
+.auth__pitch h1 { font-size: clamp(2rem, 4.5vw, 3rem); line-height: 1.08; }
+.auth__pitch p { max-width: 32em; font-size: var(--fs-lead); color: var(--sand-deep); }
+.auth__benefits { display: grid; gap: var(--space-3); font-weight: 500; }
+.auth__benefits li::before { content: "✓"; margin-inline-end: 0.625rem; }
+
+.auth__card { display: grid; align-content: start; gap: var(--space-6); padding: 2.25rem; }
+
+/* tabs: pure CSS using the #login / #register anchors */
+.tabs { display: grid; grid-template-columns: 1fr 1fr; padding: 4px; background: var(--sand); border: var(--border); border-radius: var(--radius); }
+.tabs a { padding: 0.625rem; font-weight: 600; text-align: center; border-radius: 5px; }
+.tabs a[href="#login"] { color: var(--paper); background: var(--ink); }
+.auth__card:has(#register:target) .tabs a[href="#login"] { color: inherit; background: none; }
+.auth__card:has(#register:target) .tabs a[href="#register"] { color: var(--paper); background: var(--ink); }
+
+.auth-panel { display: none; gap: var(--space-4); }
+#login { display: grid; }
+.auth__card:has(#register:target) #login { display: none; }
+#register:target { display: grid; }
+.auth__switch { font-size: 0.875rem; color: var(--ink-soft); }
+
+/* student / owner toggle */
+.role-toggle { min-width: 0; border: 0; grid-template-columns: 1fr 1fr; gap: var(--space-3); }
+.role-toggle legend { grid-column: 1 / -1; margin-bottom: var(--space-2); padding: 0; }
+.role-toggle label { position: relative; }
+.role-toggle input { position: absolute; opacity: 0; }
+.role-toggle span {
+    display: block;
+    padding: 0.75rem;
+    font-weight: 600;
+    text-align: center;
+    background: var(--paper);
+    border: var(--border);
+    border-radius: 6px;
+    cursor: pointer;
+}
+.role-toggle input:checked + span { background: var(--sun); }
+.role-toggle input:focus-visible + span { outline: 3px solid var(--clay); outline-offset: 2px; }
+
+@media (max-width: 900px) {
+    .auth { grid-template-columns: 1fr; gap: var(--space-8); }
+    .auth__pitch { padding: var(--space-8); }
+    .auth__card { padding: var(--space-6); }
+}
