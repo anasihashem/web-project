@@ -33,13 +33,13 @@ Ghorfa is a web app that helps students find a room or an apartment to rent. Own
 
 ## Why we are building this
 
-A lot of students study far from their home city, and the university dorms don't have enough space for everyone. Right now most of them look for a place through Facebook groups, classified sites or friends. The information is scattered, often old, and it's hard to know if an ad is real. Because of this, brokers show up and take fees from both the student and the owner.
+A lot of students study far from their home city, and the university dorms don't have enough space for everyone. Right now, most of them look for a place through Facebook groups, classified sites, or friends. The information is scattered, often old, and it's hard to know if an ad is real. Because of this, brokers show up and take fees from both the student and the owner.
 
 What Ghorfa tries to do:
 
 - put all the available rooms in one place
 - show the important details in every listing (price, furniture condition, photos, map location)
-- let students filter by price, type of place and furniture condition
+- let students filter by price, type of place, and furniture condition
 - let students talk to owners directly
 - make it safer with registered owners and an admin who reviews listings
 
@@ -209,19 +209,7 @@ Some choices we made to keep it simple:
 - Reports are only about listings (the SRS also allows reports about users). The audit event table from the SRS is left out.
 - `Review_status` is pending, approved or rejected. `Availability` is available or rented.
 
-If we turn the ERD into tables we get this (PK = primary key, FK = foreign key):
-
-```
-USER(user_id PK, full_name, email UNIQUE, password_hash, role, phone, show_phone)
-LISTING(listing_id PK, owner_id FK, title, description, type, price,
-        furniture_condition, latitude, longitude, review_status, availability)
-LISTING_PHOTO(listing_id FK, photo_number, image_url, display_order)   PK = (listing_id, photo_number)
-FAVORITE(student_id FK, listing_id FK, saved_date)                      PK = (student_id, listing_id)
-CONVERSATION(conversation_id PK, student_id FK, listing_id FK, created_at, status)
-MESSAGE(message_id PK, conversation_id FK, sender_id FK, body, sent_at, is_read)
-REPORT(report_id PK, reporter_id FK, listing_id FK, reason, details, status)
-MODERATION_RECORD(record_id PK, admin_id FK, listing_id FK, action, reason, decision_date)
-```
+If we turn the ERD into tables, we get this (PK = primary key, FK = foreign key):
 
 ### 2. DFD level 1
 
