@@ -1,614 +1,313 @@
-<<<<<<< HEAD
-# Ghorfa — Student Accommodation Platform
-=======
 # Ghorfa
->>>>>>> 0dac601b220fbfd4099ab5e5a7d8ac05fb40c224
 
-**Ghorfa** is a web-based student accommodation platform designed to connect university students directly with property owners, without brokers. It helps students discover rooms and apartments, compare listing information, and contact owners. The initial target deployment described in the SRS is the Egypt-Japan University of Science and Technology (E-JUST) in New Borg El Arab, Egypt.
+Ghorfa ("room" in Arabic) is a web app that helps students find a room or an apartment to rent. Owners post their places with the price, photos, furniture condition and the location on the map, and students search, save and contact them directly. There are no brokers in the middle.
 
-<<<<<<< HEAD
-> **Project scope note:** The feature descriptions and diagrams in this README document the intended system defined by the Software Requirements Specification (SRS). The repository structure currently shown is a frontend-oriented project (`HTML`, `CSS`, and JavaScript). The supplied folder view does not establish that backend services, persistent storage, authentication, messaging, maps, or every SRS requirement have been implemented. Treat those as product requirements until their implementation is confirmed.
+**Course:** Networks and Web Programming, Computer Science Faculty, E-JUST
+**Professor:** Ahmed Antar
+**TA:** Haidy El-Gharbawy
 
-## Table of Contents
+**Team**
 
-- [Project Goals](#project-goals)
-- [User Roles](#user-roles)
-- [Functional Requirements](#functional-requirements)
-- [Non-Functional Requirements](#non-functional-requirements)
-- [Scope and Limitations](#scope-and-limitations)
-- [Repository Structure](#repository-structure)
-- [Run Locally](#run-locally)
-- [Conceptual System Architecture](#conceptual-system-architecture)
-- [System Diagrams](#system-diagrams)
-  - [DFD — Context Diagram (Level 0)](#dfd--context-diagram-level-0)
-  - [DFD — Main Processes (Level 1)](#dfd--main-processes-level-1)
-  - [Use Case Diagram](#use-case-diagram)
-  - [ERD — Logical Data Model](#erd--logical-data-model)
-  - [Sequence Diagram — Student Sends a Message](#sequence-diagram--student-sends-a-message)
-  - [Sequence Diagram — Listing Review](#sequence-diagram--listing-review)
-- [Core Data Entities](#core-data-entities)
-- [Important Business Rules](#important-business-rules)
-- [Open Design Decisions](#open-design-decisions)
-- [License](#license)
+| Name | ID |
+| --- | --- |
+| Anas Ibrahim Sayed | 320250109 |
+| Mazen Mahmoud | 320250094 |
+| Malek Khamis | 320250--- |
 
-## Project Goals
+## Contents
 
-- Provide one organized place for students to browse accommodation listings associated with a university.
-- Let students filter listings by university, maximum price, accommodation type, and furniture condition.
-- Give owners a way to create and maintain their own accommodation listings.
-- Support direct student–owner communication and student favorites.
-- Improve listing quality through administrative review and reporting workflows.
-- Protect personal information, especially owner phone-number visibility and private conversations.
+1. [Why we are building this](#why-we-are-building-this)
+2. [Current status](#current-status)
+3. [Functional requirements](#functional-requirements)
+4. [Non-functional requirements](#non-functional-requirements)
+5. [Diagrams](#diagrams)
+   - [ERD](#1-erd)
+   - [DFD level 1](#2-dfd-level-1)
+   - [Use case diagram](#3-use-case-diagram)
+   - [Sequence diagrams](#4-sequence-diagrams)
+6. [Project structure](#project-structure)
+7. [How to run it](#how-to-run-it)
+8. [To do](#to-do)
+9. [Editing the diagrams](#editing-the-diagrams)
 
-## User Roles
+## Why we are building this
 
-| Role | Main capabilities |
-|---|---|
-| **Guest** | Browse and search public listings, view public listing details, and register as a student or owner. |
-| **Student** | Browse and filter listings, manage personal favorites, and start or participate in conversations with owners. |
-| **Property Owner** | Browse listings, manage only their own listings, upload listing photographs, control public phone-number visibility, mark accommodation as rented, and reply to students. |
-| **Administrator** | Review listings, approve or reject submissions, manage user accounts, and review reports or inappropriate content. |
+A lot of students study far from their home city, and the university dorms don't have enough space for everyone. Right now most of them look for a place through Facebook groups, classified sites or friends. The information is scattered, often old, and it's hard to know if an ad is real. Because of this, brokers show up and take fees from both the student and the owner.
 
-Protected actions must be authorized according to the user's role. Hiding a control in the interface alone is not sufficient; the SRS requires permission checks on the server side.
+What Ghorfa tries to do:
 
-## Functional Requirements
+- put all the available rooms in one place
+- show the important details in every listing (price, furniture condition, photos, map location)
+- let students filter by price, type of place and furniture condition
+- let students talk to owners directly
+- make it safer with registered owners and an admin who reviews listings
 
-The following summary is based on the functional-requirement groups in the SRS. Requirement IDs are included to make the README traceable to the specification.
+Ghorfa only connects students and owners. Payments and rental contracts are **not** part of the first version, they arrange that between themselves.
 
-| Area | SRS requirement IDs | Required system behavior |
-|---|---|---|
-| **Registration and authentication** | `FR-AUTH-001`–`FR-AUTH-010` | Allow guest registration as a student or owner; validate required fields; prevent duplicate email registration; support login and logout; enforce role-based access; protect restricted areas; provide account recovery; and provision administrator accounts without public administrator self-registration. |
-| **User profiles** | `FR-PROF-001`–`FR-PROF-005` | Allow students and owners to view their profiles, update permitted information, protect account identifiers and role assignments, and initiate account deletion or deactivation requests. |
-| **Browsing, search, and filtering** | `FR-SRCH-001`–`FR-SRCH-010` | Let guests and authenticated users browse published listings; filter by university, maximum price, accommodation type, and furniture condition; combine active filters; show empty states; reset filters; display listing summaries; and exclude listings not eligible for public display. |
-| **Listing details** | `FR-ROOM-001`–`FR-ROOM-008` | Display listing description, price and rental period, accommodation type, furniture condition, photographs, availability, map location when available, and owner contact information only when permitted by the owner's visibility setting. |
-| **Listing management** | `FR-LIST-001`–`FR-LIST-012` | Allow authenticated owners to create, view, edit, and request deletion of their own listings; validate listing data; associate each listing with its owner; submit new listings for review; show moderation and availability status; and mark a listing as rented. |
-| **Listing photographs** | `FR-IMG-001`–`FR-IMG-005` | Allow owners to upload, remove, or replace photographs for their own listings; associate each photograph with the correct listing; validate file type and size; and report upload failures. |
-| **Favorites** | `FR-FAV-001`–`FR-FAV-005` | Allow authenticated students to add, view, and remove favorites; prevent duplicate student–listing entries; and restrict access to the student's own favorites. |
-| **Internal messaging and owner contact** | `FR-MSG-001`–`FR-MSG-009` | Allow students to initiate conversations with listing owners; allow owners to view and reply to their conversations; associate messages with a sender, conversation, and timestamp; restrict conversations to their participants; report sending failures where supported; and respect owner phone visibility preferences. Ghorfa does not require the rental transaction to take place through the platform. |
-| **Location and maps** | `FR-MAP-001`–`FR-MAP-004` | Store or reference listing locations; display them through the configured map service when valid; provide feedback when a map cannot be displayed; and avoid disclosing more precise location data than permitted. |
-| **Administration and moderation** | `FR-ADM-001`–`FR-ADM-010` | Restrict administrative actions to authorized administrators; provide a review queue; support listing approval, rejection, and removal; support user management; record moderation decisions and timestamps; and capture rejection/removal reasons where required by the approved policy. |
-| **Reporting** | `FR-REP-001`–`FR-REP-004` | Provide an authorized way to report fake, misleading, or inappropriate listings; allow administrators to review reports and record outcomes; and restrict report access. The precise reporting policy remains subject to an open SRS decision. |
-| **Notifications** | `FR-NOTIF-001`–`FR-NOTIF-003` | The SRS identifies optional notifications for new messages, listing approval/rejection, and owner replies. These are stated as **may** requirements, not confirmed mandatory functionality. |
+There are four kinds of users:
 
-## Non-Functional Requirements
+- **Guest**: someone who is not logged in. Can browse and search.
+- **Student**: can also save favorites and chat with owners.
+- **Owner**: posts and manages listings and answers student messages.
+- **Administrator**: approves or rejects listings, manages users and handles reports.
 
-These requirements describe the expected quality and operating characteristics of the system.
+## Current status
 
-| Quality attribute | SRS requirement IDs | Requirement summary |
-|---|---|---|
-| **Performance** | `NFR-PERF-001`–`NFR-PERF-004` | Under the agreed test environment and load profile, 95% of ordinary page and search requests should complete within **3 seconds**, excluding third-party map rendering and large image transfers. Large result sets must be bounded through pagination or an equivalent mechanism; images should be optimized; and search results must reflect the active filters without stale results. |
-| **Security** | `NFR-SEC-001`–`NFR-SEC-008` | Hash passwords using a recognized method; enforce role-based authorization and listing ownership checks; restrict messages to participants; use HTTPS in deployment; safely validate user text and uploaded files; protect credentials and session tokens; and apply reasonable protection against repeated automated login attempts. |
-| **Privacy** | `NFR-PRIV-001`–`NFR-PRIV-005` | Show an owner's phone number only when enabled; restrict private profiles, favorites, and conversations to authorized users; collect only necessary information; never expose credentials in admin views or normal responses; and define a retention/deletion policy before production. |
-| **Usability and accessibility** | `NFR-USE-001`–`NFR-USE-006` | Use consistent navigation and interaction patterns; identify required form fields; provide understandable validation and empty/loading/success/error states; give controls accessible names; maintain sufficient contrast and visible keyboard focus; and support keyboard navigation for primary workflows. |
-| **Compatibility and responsiveness** | `NFR-COMP-001`–`NFR-COMP-004` | Support the agreed current major versions of Chrome, Edge, Firefox, and Safari; remain usable from **320 CSS pixels** wide and above; adapt to desktop, tablet, and mobile without ordinary-content horizontal overflow; and avoid making essential controls hover-only. |
-| **Reliability and availability** | `NFR-REL-001`–`NFR-REL-005` | Report critical failures accurately; preserve successfully saved information across sessions; define production backup and restoration; allow listing details to remain accessible when the map service is unavailable; and handle image-storage failures without falsely reporting a successful photograph upload. |
-| **Maintainability** | `NFR-MAINT-001`–`NFR-MAINT-003` | Separate presentation, application behavior, and data-access responsibilities; document configuration, deployment, and essential administration; and use consistent naming and code organization. |
-| **Scalability** | `NFR-SCALE-001`–`NFR-SCALE-002` | Allow additional universities without redesigning the core listing model; support growth through pagination, indexed search fields, and separable image storage where appropriate. |
-| **Localization** | `NFR-LOC-001`–`NFR-LOC-003` | Initially present prices in Egyptian pounds (EGP), subject to confirmation of the rental-price policy; design for Arabic and English; and support right-to-left layout when Arabic is enabled. |
+Phase 1 is done: the project documentation, the SRS, and the front-end pages.
 
-## Scope and Limitations
+What exists now:
 
-### Included in the SRS scope
+- Home page, search page (filters + list/map toggle), room details page, login/register page
+- A layout that adapts to smaller screens (media queries) with a menu button for mobile, and an EN/Arabic button in the header (the button is only the design for now, it doesn't switch language)
 
-- Public discovery and filtering of published accommodation listings.
-- Student and property-owner accounts with role-based access.
-- Listing details, photographs, and map-based location display.
-- Student favorites and internal student–owner messaging.
-- Owner listing management and phone-number visibility control.
-- Administrative listing moderation, user management, and report handling.
+What doesn't exist yet:
 
-### Explicitly out of scope for the initial release
+- Back end, database and real login
+- The pages use hard-coded sample rooms for now (for example "Sunny single room, Hay 4")
+- Chat, favorites, owner dashboard and admin panel pages
 
-- Online rent payments, deposits, refunds, or payment reconciliation.
-- Online rental contracts, electronic signatures, or legal verification of rental agreements.
-- Automated legal verification of property ownership.
-- Native iOS or Android applications.
-- Expansion beyond the initial university area.
+## Functional requirements
 
-Students and owners arrange property visits, payments, and rental agreements independently outside Ghorfa. The platform must not present a listing or owner as legally verified unless a separate verification process exists.
+These are what the system must do. Every point has a number so we can refer to it in the diagrams and tests. The full list with the original IDs is in the SRS (`docs/Ghorfa_Software_Requirements_Specification.docx`).
 
-## Repository Structure
+**Accounts**
 
-The following tree reflects the repository layout visible in the supplied project screenshot:
+1. A guest can register as a student or as an owner.
+2. The system checks the registration form and does not allow two accounts with the same email.
+3. A registered user can log in and log out.
+4. After logging in, the user can only reach the pages that fit their role (student, owner or admin).
+5. A user can see and edit their profile.
+6. A user who forgot their password can recover access.
+7. Admin accounts are created by the team. Nobody can register as an admin from the website.
 
-```text
-Ghorfa/
-├── .vscode/        # Visual Studio Code project settings
-├── css/            # Stylesheets
-├── imgs/           # Project images and visual assets
-├── pages/          # Additional HTML pages
-├── index.html      # Main page
-├── main.js         # Main JavaScript file
-├── LICENSE         # License information
-└── README.md       # Project documentation
+**Searching and browsing**
+
+8. Anyone, even without an account, can browse the published listings.
+9. Listings can be filtered by maximum price, type of place (room, apartment, shared room) and furniture condition (furnished, semi-furnished, empty).
+10. Filters work together, so the results must match all the selected filters.
+11. If nothing matches, the system shows a clear message, and the user can reset the filters.
+12. Each result shows at least the title, price, type and whether it is still available.
+13. Listings that were not approved by the admin never appear in the results.
+
+**Listing details**
+
+14. The listing page shows the photos, price and rental period, type, furniture condition, description and availability.
+15. The listing page shows the location on a map.
+16. The owner's phone number is shown only if the owner chose to show it.
+
+**Owner: managing listings**
+
+17. An owner can create a listing with title, description, type, price, furniture condition and location.
+18. An owner can upload, remove and replace photos of their listing. The system checks the file type and size.
+19. A new listing is sent to the admin for review before the public can see it.
+20. An owner can edit or delete their own listings, and only their own.
+21. An owner can see the status of each listing (pending, approved, rejected, available, rented).
+22. An owner can mark a listing as rented.
+23. An owner can choose whether their phone number is visible.
+
+**Favorites**
+
+24. A logged-in student can save a listing, see the saved list and remove a listing from it.
+25. The same listing cannot be saved twice by the same student.
+
+**Messages**
+
+26. A logged-in student can start a chat with the owner of a listing.
+27. The owner can see the chats and reply.
+28. Only the student and the owner of that chat can read it.
+29. Each message is saved with its sender, the chat and the time.
+30. If a message can't be sent, the user sees an error and not a fake "sent".
+
+**Reports**
+
+31. A user can report a listing that looks fake or misleading and give a reason.
+
+**Administrator**
+
+32. The admin can see the list of listings waiting for review.
+33. The admin can approve or reject a listing and write a reason when rejecting.
+34. The admin can remove fake or inappropriate listings.
+35. The admin can manage user accounts.
+36. The admin can read the reports and write down what was decided.
+37. The system saves who made each decision and when.
+
+**Optional (maybe later)**
+
+38. Notify the owner about new messages and about the approval or rejection of a listing, and notify the student about owner replies.
+
+## Non-functional requirements
+
+These say how well the system should work, not what it does.
+
+| Area | Requirement |
+| --- | --- |
+| Performance | Normal pages and searches should load in under 3 seconds for 95% of requests (not counting the map and big images). |
+| Performance | Search results use pagination, so we never load all the listings at once. |
+| Performance | Listing images are resized so pages don't get slow. |
+| Security | Passwords are stored hashed, never as plain text. |
+| Security | Roles are checked on the server. Hiding a button in the page is not enough. |
+| Security | Before an owner edits or deletes a listing, the server checks that the listing belongs to them. |
+| Security | The site runs on HTTPS when deployed. |
+| Security | User text and uploaded files are validated to avoid injection and bad files. |
+| Security | Too many failed login attempts are limited. Session tokens and passwords never appear in the URL or in logs. |
+| Privacy | Phone numbers are public only if the owner allowed it. |
+| Privacy | Profiles, favorites and chats are visible only to the people allowed to see them. |
+| Privacy | We only collect the data we need. |
+| Usability | Navigation, labels and messages look the same on all pages. |
+| Usability | Required fields are marked and errors are easy to understand. |
+| Usability | Every main page has loading, empty, error and success states. |
+| Usability | Buttons and inputs have labels, the text has enough contrast, and the main flows work with the keyboard. |
+| Compatibility | Works on the current versions of Chrome, Edge, Firefox and Safari. |
+| Compatibility | Usable from 320 px width up (phone, tablet, laptop) without sideways scrolling. |
+| Compatibility | Nothing important depends on hover only. |
+| Reliability | If something important fails, the user is told. The system never says "done" when it wasn't. |
+| Reliability | If the map service is down, the rest of the listing page still works. |
+| Reliability | If a photo upload fails, the listing must not pretend that all photos were uploaded. |
+| Reliability | We need a backup plan for the data before the real launch. |
+| Maintainability | Presentation, logic and data access are kept in separate parts of the code. |
+| Maintainability | Same naming style everywhere, and notes on how to set up and deploy. |
+| Scalability | Use pagination and indexes so the system can handle more users and listings. |
+| Localization | Prices are in Egyptian pounds (EGP). |
+| Localization | The interface should be ready for English and Arabic, including right-to-left layout. |
+
+## Diagrams
+
+All the diagrams are in `docs/diagrams/`. Each one is there as PNG, as SVG (better for zooming) and as source so we can edit it.
+
+### 1. ERD
+
+The ERD uses the Chen notation, the same style as the COMPANY example (entities as boxes, attributes as ellipses, relationships as diamonds).
+
+![ERD of Ghorfa](docs/diagrams/erd.png)
+
+The picture is big, so it is easier to read the [SVG version](docs/diagrams/erd.svg).
+
+How to read it:
+
+- box = entity, double box = weak entity (`LISTING_PHOTO` can't exist without its listing)
+- ellipse = attribute, underlined = key, dashed underline = partial key
+- ellipse connected to smaller ellipses = composite attribute (`Location` is made of latitude and longitude)
+- diamond = relationship, double diamond = identifying relationship
+- double line = total participation (every report must belong to a listing, for example)
+- 1, N, M = cardinality
+
+Relationships in short:
+
+- one owner **posts** many listings
+- one listing **has** many photos
+- a student can **save** many listings and a listing can be saved by many students (M:N, with `Saved_date`)
+- a student **starts** many conversations, each one is **about** one listing, and it **contains** many messages
+- a user **sends** many messages
+- a user **files** many reports, and each report is **about** one listing
+- an admin **makes** many moderation records, each one **decides on** one listing
+
+Some choices we made to keep it simple:
+
+- There is one `USER` entity with a `Role` (student, owner, admin) and not three separate entities. The SRS leaves this open, and this way is easier.
+- The owner of a conversation is not stored again, we get it from the listing.
+- Reports are only about listings (the SRS also allows reports about users). The audit event table from the SRS is left out.
+- `Review_status` is pending, approved or rejected. `Availability` is available or rented.
+
+If we turn the ERD into tables we get this (PK = primary key, FK = foreign key):
+
+```
+USER(user_id PK, full_name, email UNIQUE, password_hash, role, phone, show_phone)
+LISTING(listing_id PK, owner_id FK, title, description, type, price,
+        furniture_condition, latitude, longitude, review_status, availability)
+LISTING_PHOTO(listing_id FK, photo_number, image_url, display_order)   PK = (listing_id, photo_number)
+FAVORITE(student_id FK, listing_id FK, saved_date)                      PK = (student_id, listing_id)
+CONVERSATION(conversation_id PK, student_id FK, listing_id FK, created_at, status)
+MESSAGE(message_id PK, conversation_id FK, sender_id FK, body, sent_at, is_read)
+REPORT(report_id PK, reporter_id FK, listing_id FK, reason, details, status)
+MODERATION_RECORD(record_id PK, admin_id FK, listing_id FK, action, reason, decision_date)
 ```
 
-The project files shown indicate a browser-based frontend using HTML, CSS, and JavaScript. The exact backend framework, database technology, authentication provider, map provider, and image-storage provider are not specified in the SRS and should not be assumed from this directory tree.
+### 2. DFD level 1
 
-## Run Locally
+Level 1 splits the whole system (the single "Ghorfa" circle in level 0) into its main processes and shows where the data is stored.
 
-This repository snapshot does not show a package manifest or build configuration. For a basic frontend preview:
+![DFD level 1](docs/diagrams/dfd_level1.png)
 
-1. Clone the repository:
+- circle = process
+- rectangle = external entity (someone or something outside the system)
+- open box = data store
+- arrows = data flows, with the name of the data on them
 
-   ```bash
-   git clone https://github.com/anasihashem/web-project.git
-   ```
+| Process | What it does |
+| --- | --- |
+| 1.0 Manage Accounts | register, log in, profile |
+| 2.0 Search and View Listings | filters, results, listing details, map |
+| 3.0 Manage Listings | create, edit, photos, mark as rented |
+| 4.0 Manage Favorites | save and remove favorites |
+| 5.0 Handle Messages | chats between students and owners |
+| 6.0 Moderate Listings and Users | review listings, reports, user management |
 
-2. Open the cloned `Ghorfa` project folder in Visual Studio Code.
-3. Open `index.html` in a browser, or use a local static-server extension such as **Live Server** in VS Code.
+Data stores: D1 Users, D2 Listings, D3 Listing Photos, D4 Favorites, D5 Conversations and Messages, D6 Reports and Moderation Records.
 
-If the application later relies on backend APIs, authentication, database access, maps, or remote image storage, those services must also be configured. Their setup commands and environment variables should be documented here once the implementation choices are finalized. Do not put API keys, passwords, or other secrets in this repository.
+Note: students and owners can also browse and search, but we only drew Guest and Student on process 2.0 so the diagram doesn't get even more crowded.
 
-## Conceptual System Architecture
+### 3. Use case diagram
 
-The SRS describes the following logical architecture. It is a conceptual model, not confirmation of the currently implemented deployment:
+![Use case diagram](docs/diagrams/use_case.png)
 
-1. **Browser interface** — pages and controls used by guests, students, owners, and administrators.
-2. **Application services** — account/profile management, search, listing management, favorites, messaging, and moderation.
-3. **Persistent data store** — users, listings, photographs' metadata, favorites, conversations, messages, reports, and moderation records.
-4. **Image storage and delivery** — stores and serves listing photographs.
-5. **External mapping service** — renders the location associated with a listing.
+- Student, Owner and Administrator are all **Registered Users** (the arrows with the empty triangle), so they all log in the same way.
+- A guest can only register, browse and view listings.
+- "Report a listing" is an `extend` of "View listing details", because the user only does it sometimes.
+- "Upload photos" is an `include` of "Manage listings", and "Save favorites" and "Message an owner" include "Log in", because they can't be done without it.
+- The map service is an external system used when a listing is shown.
 
-## System Diagrams
+The detailed use case descriptions (main flow, alternative flows, preconditions) are in chapter 9 of the SRS (UC-01 to UC-12).
 
-The diagrams below are written in Mermaid. GitHub renders Mermaid code blocks directly in Markdown, so the diagrams should appear when this README is viewed on GitHub.
+### 4. Sequence diagrams
 
-### DFD — Context Diagram (Level 0)
+We drew the two flows that have the most steps and the most checks.
 
-This context diagram shows Ghorfa as one system and the external actors/services exchanging information with it.
+**A student sends a message to an owner**
 
-```mermaid
-flowchart LR
-    Guest[Guest]
-    Student[Student]
-    Owner[Property Owner]
-    Admin[Administrator]
-    Maps[External Map Service]
-    Images[Image Storage Service]
-    Ghorfa((0. Ghorfa Student Accommodation System))
+![Sequence diagram: student sends a message](docs/diagrams/sequence_send_message.png)
 
-    Guest -->|Search criteria, registration data| Ghorfa
-    Ghorfa -->|Public listing results and details| Guest
+**An owner submits a listing and the admin reviews it**
 
-    Student -->|Searches, profile actions, favorites, messages| Ghorfa
-    Ghorfa -->|Listings, favorites, conversation responses| Student
+![Sequence diagram: listing review](docs/diagrams/sequence_listing_review.png)
 
-    Owner -->|Profile changes, listing data, photos, replies| Ghorfa
-    Ghorfa -->|Listing status, student messages, results| Owner
+The names like `POST /listings` are only examples to make the diagrams clear. We haven't chosen the back-end technology yet. Notifications are not drawn because they are optional in the SRS (FR 38).
 
-    Admin -->|Moderation decisions, user-management actions| Ghorfa
-    Ghorfa -->|Pending listings, reports, user records| Admin
+## Project structure
 
-    Ghorfa -->|Location lookup/render request| Maps
-    Maps -->|Map tiles or location response| Ghorfa
-
-    Ghorfa -->|Photo upload/retrieval request| Images
-    Images -->|Stored image reference or image data| Ghorfa
+```
+.
+├── index.html                  home page
+├── main.js                     menu button + photo gallery script
+├── pages/
+│   ├── login.html              login and register
+│   ├── search.html             search page with filters
+│   └── room.html               room details
+├── css/                        base, components, home, search, room, auth
+├── imgs/                       logo and illustrations
+└── docs/
+    ├── Ghorfa_Phase1_Documentation.pdf
+    ├── Ghorfa_Software_Requirements_Specification.docx
+    └── diagrams/               ERD, DFD, use case, sequence diagrams (+ sources)
 ```
 
-### DFD — Main Processes (Level 1)
+## How to run it
 
-This Level 1 DFD decomposes Ghorfa into the main processes and logical data stores identified in the SRS. The data stores are conceptual; the SRS does not select a physical database or storage provider.
+There is nothing to install for now. The front end is plain HTML, CSS and a little JavaScript, with the Readex Pro font from Google Fonts (so the fonts need internet).
 
-```mermaid
-flowchart LR
-    Guest[Guest]
-    Student[Student]
-    Owner[Property Owner]
-    Admin[Administrator]
-    MapService[External Map Service]
-    ImageService[Image Storage Service]
+1. Download or clone the project.
+2. Open `index.html` in a browser.
 
-    P1([P1 Account and Profile Management])
-    P2([P2 Search Listings and View Details])
-    P3([P3 Manage Listings and Photos])
-    P4([P4 Manage Favorites])
-    P5([P5 Messaging and Contact])
-    P6([P6 Moderate Listings, Users, and Reports])
+## To do
 
-    D1[(D1 Users and Profiles)]
-    D2[(D2 Listings and Universities)]
-    D3[(D3 Listing Photo References)]
-    D4[(D4 Favorites)]
-    D5[(D5 Conversations and Messages)]
-    D6[(D6 Reports and Moderation Records)]
+- Move `main.js` into a `js/` folder, or change the script paths. The pages in `pages/` load `../js/main.js`, but the file is in the root folder, and `index.html` does not load it at all. Because of this the menu button and the photo gallery don't work yet.
+- `index.html` links to `pages/about.html`, which doesn't exist yet.
+- Choose the back end and the database, then build the real login, listings, favorites and chat.
+- Build the owner dashboard and the admin panel.
+- Choose the map service (the room page only has an "Open in Google Maps" link for now).
+- Arabic version and right-to-left layout.
 
-    Guest -->|Registration data| P1
-    Student -->|Credentials and profile changes| P1
-    Owner -->|Credentials and profile changes| P1
-    Admin -->|Authenticated admin actions| P1
-    P1 <--> |Account and profile records| D1
+## Editing the diagrams
 
-    Guest -->|Search filters and listing request| P2
-    Student -->|Search filters and listing request| P2
-    Owner -->|Search filters and listing request| P2
-    P2 <--> |Published listing data| D2
-    P2 <--> |Permitted owner/public details| D1
-    P2 -->|Location request| MapService
-    MapService -->|Map response| P2
-    P2 -->|Listing results and details| Guest
-    P2 -->|Listing results and details| Student
-    P2 -->|Listing results and details| Owner
-
-    Owner -->|Create, edit, delete, availability changes| P3
-    Owner -->|Upload, replace, or remove photos| P3
-    P3 <--> |Listing records and status| D2
-    P3 <--> |Photo metadata and references| D3
-    P3 <--> |Photo files| ImageService
-    P3 -->|New listing for review| P6
-    P3 -->|Owner listing status| Owner
-
-    Student -->|Add, view, or remove favorite| P4
-    P4 <--> |Favorite associations| D4
-    P4 -->|Favorite listing information| Student
-
-    Student -->|Start conversation and send message| P5
-    Owner -->|Read and reply to messages| P5
-    P5 <--> |Participant/account checks| D1
-    P5 <--> |Conversation and message records| D5
-    P5 -->|Conversation and message results| Student
-    P5 -->|Conversation and message results| Owner
-
-    Admin -->|Review, approve, reject, remove, manage users| P6
-    Guest -->|Listing report, subject to policy| P6
-    Student -->|Listing report| P6
-    Owner -->|Listing report| P6
-    P6 <--> |Listing moderation status| D2
-    P6 <--> |User/account records| D1
-    P6 <--> |Reports and moderation decisions| D6
-    P6 -->|Review queue and report details| Admin
-    P6 -->|Decision and listing status| Owner
-```
-
-### Use Case Diagram
-
-This UML-style use case view summarizes the interactions specified for the four SRS actors. Reporting by guests and some reporting-policy details remain subject to stakeholder confirmation.
-
-```mermaid
-flowchart LR
-    Guest[Guest]
-    Student[Student]
-    Owner[Property Owner]
-    Admin[Administrator]
-
-    subgraph System[Ghorfa System]
-        UC1((Browse and Search Listings))
-        UC2((View Listing Details))
-        UC3((Register / Log In))
-        UC4((Manage Favorites))
-        UC5((Message Owner / Reply))
-        UC6((Manage Own Listings))
-        UC7((Upload Listing Photos))
-        UC8((Manage Phone Visibility))
-        UC9((Mark Listing as Rented))
-        UC10((Review / Approve / Reject Listings))
-        UC11((Manage User Accounts))
-        UC12((Review Reports))
-        UC13((Report a Listing))
-    end
-
-    Guest --- UC1
-    Guest --- UC2
-    Guest --- UC3
-    Guest --- UC13
-
-    Student --- UC1
-    Student --- UC2
-    Student --- UC4
-    Student --- UC5
-    Student --- UC13
-
-    Owner --- UC1
-    Owner --- UC2
-    Owner --- UC5
-    Owner --- UC6
-    Owner --- UC7
-    Owner --- UC8
-    Owner --- UC9
-    Owner --- UC13
-
-    Admin --- UC1
-    Admin --- UC2
-    Admin --- UC10
-    Admin --- UC11
-    Admin --- UC12
-```
-
-### ERD — Logical Data Model
-
-The ERD models the SRS's core entities, primary keys (PKs), foreign keys (FKs), and principal relationships. It is a **logical** model; the physical schema and database technology remain implementation decisions.
-
-```mermaid
-erDiagram
-    USER {
-        string user_id PK
-        string full_name
-        string email UK
-        string password_hash
-        string role
-        string account_status
-        datetime created_at
-    }
-
-    STUDENT_PROFILE {
-        string user_id PK, FK
-        string university_id FK
-        string student_details
-    }
-
-    OWNER_PROFILE {
-        string user_id PK, FK
-        string phone_number
-        boolean phone_visible
-        string profile_details
-    }
-
-    UNIVERSITY {
-        string university_id PK
-        string name
-        string city
-        boolean active_status
-        string campus_coordinates
-    }
-
-    LISTING {
-        string listing_id PK
-        string owner_id FK
-        string university_id FK
-        string title
-        string description
-        string accommodation_type
-        decimal price
-        string currency
-        string rental_period
-        string furniture_condition
-        string location
-        string moderation_status
-        string availability_status
-        datetime created_at
-        datetime updated_at
-    }
-
-    LISTING_PHOTO {
-        string photo_id PK
-        string listing_id FK
-        string storage_reference
-        int display_order
-        datetime created_at
-    }
-
-    FAVORITE {
-        string favorite_id PK
-        string student_id FK
-        string listing_id FK
-        datetime created_at
-    }
-
-    CONVERSATION {
-        string conversation_id PK
-        string student_id FK
-        string owner_id FK
-        string listing_id FK
-        datetime created_at
-        string status
-    }
-
-    MESSAGE {
-        string message_id PK
-        string conversation_id FK
-        string sender_id FK
-        string message_body
-        datetime created_at
-        boolean read_status
-    }
-
-    REPORT {
-        string report_id PK
-        string reporter_id FK
-        string target_type
-        string target_id
-        string reason
-        string description
-        string status
-        datetime created_at
-    }
-
-    MODERATION_RECORD {
-        string record_id PK
-        string administrator_id FK
-        string target_type
-        string target_id
-        string action
-        string reason
-        datetime decision_at
-    }
-
-    AUDIT_EVENT {
-        string event_id PK
-        string actor_id FK
-        string action
-        string target_type
-        string target_id
-        datetime timestamp
-    }
-
-    USER ||--o| STUDENT_PROFILE : has
-    USER ||--o| OWNER_PROFILE : has
-    UNIVERSITY ||--o{ STUDENT_PROFILE : associates
-    USER ||--o{ LISTING : owns
-    UNIVERSITY ||--o{ LISTING : categorizes
-    LISTING ||--o{ LISTING_PHOTO : contains
-    USER ||--o{ FAVORITE : creates_as_student
-    LISTING ||--o{ FAVORITE : is_saved_in
-    USER ||--o{ CONVERSATION : participates_as_student
-    USER ||--o{ CONVERSATION : participates_as_owner
-    LISTING o|--o{ CONVERSATION : is_about
-    CONVERSATION ||--o{ MESSAGE : contains
-    USER ||--o{ MESSAGE : sends
-    USER ||--o{ REPORT : submits
-    USER ||--o{ MODERATION_RECORD : performs_as_admin
-    USER ||--o{ AUDIT_EVENT : performs
-```
-
-**ERD notes and constraints**
-
-- `USER.email` must be unique.
-- A `FAVORITE` must reference an existing student and listing. The `(student_id, listing_id)` pair must be unique to prevent duplicate favorites.
-- Each listing belongs to one owner account and references a supported university or an explicitly permitted location category.
-- Each photograph references the listing to which it belongs.
-- Each message references a conversation and an authorized participant as its sender.
-- Conversation access is restricted to its student and owner participants.
-- `REPORT.target_type` / `target_id`, `MODERATION_RECORD.target_type` / `target_id`, and `AUDIT_EVENT.target_type` / `target_id` represent the target record. The SRS describes report targets as potentially being listings or users, so these target references are modeled generically rather than as a single direct foreign key.
-- `STUDENT_PROFILE` and `OWNER_PROFILE` are shown as optional one-to-one entities for clarity. The SRS leaves open whether these should be separate tables or role-specific attributes on `USER`; finalize this choice during database design.
-
-### Sequence Diagram — Student Sends a Message
-
-The sequence follows the SRS requirement to authenticate the sender, verify conversation participation, persist the message, and return a success or failure result. It does not assume real-time push infrastructure.
-
-```mermaid
-sequenceDiagram
-    autonumber
-    actor Student
-    participant UI as Browser / Student UI
-    participant App as Application Service
-    participant Auth as Authorization and Conversation Service
-    database DB as Database
-    participant OwnerUI as Owner Interface
-
-    Student->>UI: Open a listing and compose a message
-    UI->>App: Submit message and conversation details
-    App->>Auth: Validate session and requested conversation
-    Auth->>DB: Load conversation and participant records
-    DB-->>Auth: Conversation and participant data
-
-    alt Student is not authenticated or is not a participant
-        Auth-->>App: Reject request
-        App-->>UI: Return authorization error
-        UI-->>Student: Show error feedback
-    else Student is an authorized participant
-        Auth->>DB: Save message with sender, conversation, and timestamp
-        alt Message saved successfully
-            DB-->>Auth: Saved message record
-            Auth-->>App: Message accepted
-            App-->>UI: Return success and message data
-            UI-->>Student: Display sent message
-            Note over OwnerUI,DB: The owner can retrieve the message when opening the conversation; no push delivery is assumed.
-            OwnerUI->>App: Open the conversation
-            App->>Auth: Verify owner is a participant
-            Auth->>DB: Retrieve conversation messages
-            DB-->>Auth: Authorized messages
-            Auth-->>App: Conversation data
-            App-->>OwnerUI: Display conversation
-        else Message persistence fails
-            DB-->>Auth: Save failure
-            Auth-->>App: Message was not saved
-            App-->>UI: Return failure response
-            UI-->>Student: Show sending failure
-        end
-    end
-```
-
-### Sequence Diagram — Listing Review
-
-This sequence covers owner submission, placement in the moderation queue, an administrator's decision, and persistence of the resulting status. Notifications are shown only as an optional step because the SRS defines them as **may** requirements.
-
-```mermaid
-sequenceDiagram
-    autonumber
-    actor Owner
-    participant OwnerUI as Owner Interface
-    participant ListingService as Listing Service
-    database DB as Database
-    participant AdminUI as Admin Interface
-    actor Admin as Administrator
-
-    Owner->>OwnerUI: Complete listing form and submit
-    OwnerUI->>ListingService: Submit listing and photo references
-    ListingService->>ListingService: Validate required listing data
-    ListingService->>DB: Save listing with pending-review status
-    DB-->>ListingService: Listing ID and saved status
-    ListingService-->>OwnerUI: Submission accepted
-    OwnerUI-->>Owner: Show pending-review status
-
-    Admin->>AdminUI: Open moderation queue
-    AdminUI->>ListingService: Request pending listings
-    ListingService->>DB: Retrieve pending listing records
-    DB-->>ListingService: Pending listings
-    ListingService-->>AdminUI: Return moderation queue
-    AdminUI-->>Admin: Display pending listings
-
-    Admin->>AdminUI: Open listing and choose decision
-    AdminUI->>ListingService: Submit approve or reject decision
-    ListingService->>ListingService: Verify administrator authorization
-    ListingService->>DB: Save decision, reason if required, and timestamp
-    DB-->>ListingService: Decision persisted
-    ListingService->>DB: Update listing moderation status
-    DB-->>ListingService: Updated listing status
-    ListingService-->>AdminUI: Return decision result
-    AdminUI-->>Admin: Display updated status
-
-    opt Notifications are enabled and approved
-        ListingService-->>OwnerUI: Make decision outcome available
-        OwnerUI-->>Owner: Display listing review outcome
-    end
-```
-
-## Core Data Entities
-
-| Entity | Purpose |
-|---|---|
-| `User` | Registered account, credentials hash, role, and account status. |
-| `StudentProfile` | Optional student-specific information and university association. |
-| `OwnerProfile` | Optional owner-specific information, including phone-number visibility preference. |
-| `University` | Supported university and optional campus information. |
-| `Listing` | Accommodation advertisement, price, rental period, furniture condition, location, moderation status, and availability. |
-| `ListingPhoto` | Photograph metadata and storage reference associated with a listing. |
-| `Favorite` | Association between a student and a saved listing. |
-| `Conversation` | Student–owner conversation, optionally associated with a listing. |
-| `Message` | Message body, sender, conversation, timestamp, and read status if supported. |
-| `Report` | User-submitted report about a listing or user. |
-| `ModerationRecord` | Administrator action, target, reason, and decision time. |
-| `AuditEvent` | Significant security or administrative event. |
-
-## Important Business Rules
-
-- **No broker model:** Ghorfa connects students directly with property owners.
-- **No in-platform rental transaction:** Visits, rent payments, and rental contracts are arranged outside the application.
-- **Listing ownership:** Owners may manage only listings associated with their own accounts.
-- **Publication and moderation:** The SRS proposes that a listing pass the review process before it becomes publicly searchable; confirm the final approval workflow before treating it as fixed.
-- **Favorites:** A student–listing favorite association must not be duplicated.
-- **Messaging:** Only authenticated students initiate student–owner conversations, and only conversation participants may read or send messages.
-- **Phone privacy:** An owner's phone number is public only when the owner enables that preference.
-- **Rented listings:** A listing marked as rented must no longer be represented as available; exact public-display behavior remains to be confirmed.
-- **Administrative authority:** Only authorized administrators can perform moderation and user-management actions.
-- **No implied legal verification:** Administrative content review does not prove property ownership or legal availability.
-
-## Open Design Decisions
-
-The SRS intentionally leaves several decisions for stakeholder confirmation. Resolve these before treating the related workflows and diagrams as final:
-
-- Whether all new listings must remain hidden until administrator approval, and whether material edits require re-approval.
-- Whether rented listings disappear from public search but remain in the owner's history.
-- Whether owners can permanently delete listings or only deactivate/archive them.
-- Whether users can report listings, who may report, and what rate limits apply.
-- Whether conversations can continue after a listing is rented or removed.
-- Which registration fields are mandatory and whether email verification is required.
-- The allowed rental-price period, exact image file/count/size limits, and supported map/image providers.
-- Whether Arabic and English are both required in the first release.
-- Whether administrators may access private messages.
-- The production performance/concurrency target and the data retention, deletion, backup, and restoration policies.
-
-## License
-
-See the [`LICENSE`](LICENSE) file for the licensing terms of this project.
-=======
-## Structure
-- `index.html` landing page
-- `pages/` search, room details, login/register
-- `css/` base (tokens, reset) -> components (shared) -> one file per page
-- `js/main.js` mobile menu and room gallery
-- `imgs/` logo.svg, illustration.svg, room.png
-=======
-# web-project
->>>>>>> 0dac601b220fbfd4099ab5e5a7d8ac05fb40c224
+- `erd.*`: run `python3 make_erd.py` in `docs/diagrams/`. It needs Graphviz and the Python packages `cairosvg` and `Pillow`.
+- `dfd_level1.dot`: run `dot -Tpng -Gdpi=110 dfd_level1.dot -o dfd_level1.png` (Graphviz).
+- `use_case.puml` and the two `sequence_*.puml` files: open them with [PlantUML](https://plantuml.com) or paste them into the online PlantUML editor.
