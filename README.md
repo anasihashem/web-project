@@ -1,6 +1,6 @@
 # Ghorfa
 
-Ghorfa ("room" in Arabic) is a web app that helps students find a room or an apartment to rent. Owners post their places with the price, photos, furniture condition and the location on the map, and students search, save and contact them directly. There are no brokers in the middle.
+Ghorfa is a web app that helps students find a room or an apartment to rent. Owners post their places with the price, photos, furniture condition and the location on the map, and students search, save, and contact them directly. There are no brokers in the middle.
 
 **Course:** Networks and Web Programming, Computer Science Faculty, E-JUST
 **Professor:** Ahmed Antar
