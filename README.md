@@ -1,7 +1,12 @@
+<<<<<<< HEAD
 # Ghorfa — Student Accommodation Platform
+=======
+# Ghorfa
+>>>>>>> 0dac601b220fbfd4099ab5e5a7d8ac05fb40c224
 
 **Ghorfa** is a web-based student accommodation platform designed to connect university students directly with property owners, without brokers. It helps students discover rooms and apartments, compare listing information, and contact owners. The initial target deployment described in the SRS is the Egypt-Japan University of Science and Technology (E-JUST) in New Borg El Arab, Egypt.
 
+<<<<<<< HEAD
 > **Project scope note:** The feature descriptions and diagrams in this README document the intended system defined by the Software Requirements Specification (SRS). The repository structure currently shown is a frontend-oriented project (`HTML`, `CSS`, and JavaScript). The supplied folder view does not establish that backend services, persistent storage, authentication, messaging, maps, or every SRS requirement have been implemented. Treat those as product requirements until their implementation is confirmed.
 
 ## Table of Contents
@@ -597,3 +602,13 @@ The SRS intentionally leaves several decisions for stakeholder confirmation. Res
 ## License
 
 See the [`LICENSE`](LICENSE) file for the licensing terms of this project.
+=======
+## Structure
+- `index.html` landing page
+- `pages/` search, room details, login/register
+- `css/` base (tokens, reset) -> components (shared) -> one file per page
+- `js/main.js` mobile menu and room gallery
+- `imgs/` logo.svg, illustration.svg, room.png
+=======
+# web-project
+>>>>>>> 0dac601b220fbfd4099ab5e5a7d8ac05fb40c224
